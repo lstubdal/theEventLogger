@@ -10,7 +10,7 @@ import FirebaseCore
 import CoreLocation
 
 
-class AppDelegate: NSObject, UIApplicationDelegate {
+class AppDelegate: NSObject, UIApplicationDelegate, CLLocationManagerDelegate {
   func application(_ application: UIApplication,
                    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
     FirebaseApp.configure()
@@ -18,9 +18,24 @@ class AppDelegate: NSObject, UIApplicationDelegate {
       let locationManager = CLLocationManager() // initiliaze location manager
       locationManager.requestAlwaysAuthorization() // request permission for location
       
+      // rememeber! handle when user says deny or only when in use
+      
+      // get access to location
+      locationManager.startMonitoringSignificantLocationChanges() // significant location changes
+      locationManager.delegate = self
+      
     return true
   }
 }
+
+// callback that happens when CLLocationManager records a new location
+extension AppDelegate {
+  func locationManager(_ manager: CLLocationManager, didVisit visit: CLVisit) {
+    let clLocation = CLLocation(latitude: visit.coordinate.latitude, longitude: visit.coordinate.longitude)
+  
+  }
+}
+
 
 @main
 struct theEventLoggerApp: App {
